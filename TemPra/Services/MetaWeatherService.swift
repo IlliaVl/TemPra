@@ -8,12 +8,6 @@
 import Foundation
 import Combine
 
-protocol MetaWeatherAPIFetchable {
-    func fetchLocation(city: String) -> AnyPublisher<LocationResponse, WeatherError>
-    func fetchTomorrowWeather(woeid: Int) -> AnyPublisher<WeatherForecastResponse, WeatherError>
-    func fetchTomorrowWeather(locations: [String]) -> AnyPublisher<[WeatherForecastResponse], Error>
-}
-
 class MetaWeatherAPI {
     private let session: URLSession
     
@@ -24,7 +18,11 @@ class MetaWeatherAPI {
 
 // MARK: - MetaWeatherAPIFetchable
 
-extension MetaWeatherAPI: MetaWeatherAPIFetchable {
+extension MetaWeatherAPI: WeatherAPIFetchable {
+    func smallImageUrl(imageId: String) -> URL? {
+        URL(string: "https://www.metaweather.com/static/img/weather/png/64/\(imageId).png")
+    }
+    
     func fetchWeather(location: String) -> AnyPublisher<WeatherForecastResponse, Error> {
         var locationUrlComponents = getComponents(path: "search/")
         locationUrlComponents.queryItems = [URLQueryItem(name: "query", value: location)]
@@ -46,82 +44,11 @@ extension MetaWeatherAPI: MetaWeatherAPIFetchable {
             return fetchWeather(location: location)
         })).collect().eraseToAnyPublisher()
     }
-    
-    func fetchLocation(city: String) -> AnyPublisher<LocationResponse, WeatherError> {
-        return forecast(with: makeLocationComponents(city: city))
-    }
-    
-    func fetchTomorrowWeather(woeid: Int) -> AnyPublisher<WeatherForecastResponse, WeatherError> {
-        return forecast(with: makeTomorrowWeatherComponents(woeid: woeid))
-    }
-    
-    private func forecast<T>(
-        with components: URLComponents
-    ) -> AnyPublisher<T, WeatherError> where T: Decodable {
-        // 1
-        guard let url = components.url else {
-            let error = WeatherError.network(description: "Couldn't create URL")
-            return Fail(error: error).eraseToAnyPublisher()
-        }
-        
-        // 2
-        return session.dataTaskPublisher(for: URLRequest(url: url))
-        // 3
-            .mapError { error in
-            .network(description: error.localizedDescription)
-            }
-        // 4
-            .flatMap(maxPublishers: .max(1)) { pair in
-                self.decode(pair.data)
-            }
-        // 5
-            .eraseToAnyPublisher()
-    }
-    
-    func decode<T: Decodable>(_ data: Data) -> AnyPublisher<T, WeatherError> {
-        let justTest = Just(data).eraseToAnyPublisher()
-        //            .decode(type: T.self, decoder: decoder)
-        //            .mapError { error in
-        //            .parsing(description: error.localizedDescription)
-        //            }
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970
-        
-        return Just(data)
-            .decode(type: T.self, decoder: decoder)
-            .mapError { error in
-            .parsing(description: error.localizedDescription)
-            }
-            .eraseToAnyPublisher()
-    }
 }
-
-// MARK: - URLSession response handlers
-
-extension URLSession {
-    fileprivate func codableTask<T: Codable>(with url: URL, completionHandler: @escaping (T?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        return self.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil else {
-                completionHandler(nil, response, error)
-                return
-            }
-            completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
-        }
-    }
-    
-    func welcomeTask(with url: URL, completionHandler: @escaping (WeatherForecastResponse?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        return self.codableTask(with: url, completionHandler: completionHandler)
-    }
-}
-
 
 // MARK: - URLSession components
 
 private extension MetaWeatherAPI {
-    //https://www.metaweather.com/api/location/search/?query=london
-    //https://www.metaweather.com/api/location/44418/
-    
     private func getComponents(path: String) -> URLComponents {
         var components = URLComponents()
         components.scheme = "https"

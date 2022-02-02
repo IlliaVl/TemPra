@@ -11,7 +11,7 @@ import SwiftUI
 struct TemPraApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: LocationsTomorrowWeatherViewModel(weatherFetcher: MetaWeatherAPI()))
+            LocationsWeatherView(locationsWeatherViewModel: LocationsWeatherViewModel(weatherFetcher: MetaWeatherAPI()))
         }
     }
 }

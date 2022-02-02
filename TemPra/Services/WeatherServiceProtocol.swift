@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+protocol WeatherAPIFetchable {
+    func smallImageUrl(imageId: String) -> URL?
+    func fetchTomorrowWeather(locations: [String]) -> AnyPublisher<[WeatherForecastResponse], Error>
+}

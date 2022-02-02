@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E6B588B27A9B5C200AA548A /* LocationsTomorrowWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B588A27A9B5C200AA548A /* LocationsTomorrowWeatherViewModel.swift */; };
+		2E6B588B27A9B5C200AA548A /* LocationsWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B588A27A9B5C200AA548A /* LocationsWeatherViewModel.swift */; };
 		2E7996AC27A6E95B009F1D45 /* TemPraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7996AB27A6E95B009F1D45 /* TemPraApp.swift */; };
-		2E7996AE27A6E95B009F1D45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7996AD27A6E95B009F1D45 /* ContentView.swift */; };
+		2E7996AE27A6E95B009F1D45 /* LocationsWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7996AD27A6E95B009F1D45 /* LocationsWeatherView.swift */; };
 		2E7996B027A6E95D009F1D45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E7996AF27A6E95D009F1D45 /* Assets.xcassets */; };
 		2E7996B327A6E95D009F1D45 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E7996B227A6E95D009F1D45 /* Preview Assets.xcassets */; };
 		2E7996BD27A6E95D009F1D45 /* TemPraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7996BC27A6E95D009F1D45 /* TemPraTests.swift */; };
@@ -21,6 +21,7 @@
 		2E7996DE27A6FCD5009F1D45 /* LocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7996DD27A6FCD5009F1D45 /* LocationResponse.swift */; };
 		2E7996E027A70316009F1D45 /* WeatherError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7996DF27A70316009F1D45 /* WeatherError.swift */; };
 		2E7996E327A71DB4009F1D45 /* LocationWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7996E227A71DB4009F1D45 /* LocationWeatherViewModel.swift */; };
+		2EC626FD27AB1B2800B45566 /* LocationWeatherRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC626FC27AB1B2800B45566 /* LocationWeatherRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,10 +42,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2E6B588A27A9B5C200AA548A /* LocationsTomorrowWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTomorrowWeatherViewModel.swift; sourceTree = "<group>"; };
+		2E6B588A27A9B5C200AA548A /* LocationsWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsWeatherViewModel.swift; sourceTree = "<group>"; };
 		2E7996A827A6E95B009F1D45 /* TemPra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TemPra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7996AB27A6E95B009F1D45 /* TemPraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemPraApp.swift; sourceTree = "<group>"; };
-		2E7996AD27A6E95B009F1D45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2E7996AD27A6E95B009F1D45 /* LocationsWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsWeatherView.swift; sourceTree = "<group>"; };
 		2E7996AF27A6E95D009F1D45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E7996B227A6E95D009F1D45 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2E7996B827A6E95D009F1D45 /* TemPraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TemPraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +59,7 @@
 		2E7996DD27A6FCD5009F1D45 /* LocationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResponse.swift; sourceTree = "<group>"; };
 		2E7996DF27A70316009F1D45 /* WeatherError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherError.swift; sourceTree = "<group>"; };
 		2E7996E227A71DB4009F1D45 /* LocationWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationWeatherViewModel.swift; sourceTree = "<group>"; };
+		2EC626FC27AB1B2800B45566 /* LocationWeatherRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationWeatherRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,11 +110,11 @@
 		2E7996AA27A6E95B009F1D45 /* TemPra */ = {
 			isa = PBXGroup;
 			children = (
+				2EC626FB27AAF98300B45566 /* Views */,
 				2E7996E127A71D49009F1D45 /* ViewModels */,
 				2E7996DA27A6EE8B009F1D45 /* Responses */,
 				2E7996D527A6E997009F1D45 /* Services */,
 				2E7996AB27A6E95B009F1D45 /* TemPraApp.swift */,
-				2E7996AD27A6E95B009F1D45 /* ContentView.swift */,
 				2E7996AF27A6E95D009F1D45 /* Assets.xcassets */,
 				2E7996B127A6E95D009F1D45 /* Preview Content */,
 			);
@@ -167,9 +169,18 @@
 			isa = PBXGroup;
 			children = (
 				2E7996E227A71DB4009F1D45 /* LocationWeatherViewModel.swift */,
-				2E6B588A27A9B5C200AA548A /* LocationsTomorrowWeatherViewModel.swift */,
+				2E6B588A27A9B5C200AA548A /* LocationsWeatherViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		2EC626FB27AAF98300B45566 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2E7996AD27A6E95B009F1D45 /* LocationsWeatherView.swift */,
+				2EC626FC27AB1B2800B45566 /* LocationWeatherRowView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -302,15 +313,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E7996AE27A6E95B009F1D45 /* ContentView.swift in Sources */,
+				2E7996AE27A6E95B009F1D45 /* LocationsWeatherView.swift in Sources */,
 				2E7996D727A6EA0F009F1D45 /* MetaWeatherService.swift in Sources */,
 				2E7996D927A6EA27009F1D45 /* WeatherServiceProtocol.swift in Sources */,
 				2E7996DC27A6EEB7009F1D45 /* WeatherForecastResponse.swift in Sources */,
 				2E7996AC27A6E95B009F1D45 /* TemPraApp.swift in Sources */,
 				2E7996DE27A6FCD5009F1D45 /* LocationResponse.swift in Sources */,
 				2E7996E327A71DB4009F1D45 /* LocationWeatherViewModel.swift in Sources */,
-				2E6B588B27A9B5C200AA548A /* LocationsTomorrowWeatherViewModel.swift in Sources */,
+				2E6B588B27A9B5C200AA548A /* LocationsWeatherViewModel.swift in Sources */,
 				2E7996E027A70316009F1D45 /* WeatherError.swift in Sources */,
+				2EC626FD27AB1B2800B45566 /* LocationWeatherRowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +483,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TemPra/Preview Content\"";
+				DEVELOPMENT_TEAM = T4828UVP7Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -499,6 +512,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TemPra/Preview Content\"";
+				DEVELOPMENT_TEAM = T4828UVP7Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -563,6 +577,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T4828UVP7Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.illiavlasov.TemPraUITests;
@@ -580,6 +595,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T4828UVP7Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.illiavlasov.TemPraUITests;

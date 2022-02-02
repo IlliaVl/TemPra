@@ -8,16 +8,15 @@
 import Foundation
 import Combine
 
-class LocationsTomorrowWeatherViewModel: ObservableObject {
-    @Published var locationTomorrowWeather: [LocationTomorrowWeather]?
+class LocationsWeatherViewModel: ObservableObject {
+    @Published var locationsWeather: [LocationWeather]?
     
     private let cities = ["Gothenburg", "Stockholm", "Mountain View", "London", "New York", "Berlin"]
-    private let weatherFetcher: MetaWeatherAPIFetchable
+    private let weatherFetcher: WeatherAPIFetchable
     private var disposables = Set<AnyCancellable>()
     
-    // 1
     init(
-        weatherFetcher: MetaWeatherAPIFetchable,
+        weatherFetcher: WeatherAPIFetchable,
         scheduler: DispatchQueue = DispatchQueue(label: "WeatherViewModel")
     ) {
         self.weatherFetcher = weatherFetcher
@@ -26,11 +25,17 @@ class LocationsTomorrowWeatherViewModel: ObservableObject {
     func refresh() {
         weatherFetcher.fetchTomorrowWeather(locations: cities)
             .map { response in
-                response.map { weatherForecastResponse -> LocationTomorrowWeather in
+                response.map { [weak self] weatherForecastResponse -> LocationWeather in
                     let weather = weatherForecastResponse.consolidatedWeather[1]
-                    let weatherStateImageURL = URL(string: "https://www.metaweather.com/static/img/weather/png/64/\(weather.weatherStateAbbr).png")
-//                    print("Location: \(weatherForecastResponse.title), min: \(weather.minTemp), max: \(weather.maxTemp)")
-                    return LocationTomorrowWeather(id: weather.id, weatherStateImageURL: weatherStateImageURL!, title: weatherForecastResponse.title, minTemp: weather.minTemp, maxTemp: weather.maxTemp)
+                    return LocationWeather(
+                        id: weather.id,
+                        weatherStateImageURL: self?.weatherFetcher.smallImageUrl(imageId: weather.weatherStateAbbr),
+                        title: weatherForecastResponse.title,
+                        minTemp: weather.minTemp,
+                        minTempString: weather.minTemp.toCelsius(),
+                        maxTemp: weather.maxTemp,
+                        maxTempString: weather.maxTemp.toCelsius()
+                    )
                 }
             }
             .receive(on: DispatchQueue.main)
@@ -43,20 +48,27 @@ class LocationsTomorrowWeatherViewModel: ObservableObject {
                 }
             } receiveValue: { [weak self] locationsTomorrowWeather in
                 print(String(describing: locationsTomorrowWeather))
-                self?.locationTomorrowWeather = locationsTomorrowWeather
+                self?.locationsWeather = locationsTomorrowWeather
             }
             .store(in: &disposables)
-        
     }
     
 }
 
-struct LocationTomorrowWeather: Identifiable {
+struct LocationWeather: Identifiable {
     var id: Int
     
-    var weatherStateImageURL: URL
+    var weatherStateImageURL: URL?
     
     var title: String
     var minTemp: Double
+    var minTempString: String
     var maxTemp: Double
+    var maxTempString: String
+}
+
+extension Double {
+    func toCelsius() -> String {
+        String(format: "%.2f", self) + "°C"
+    }
 }
