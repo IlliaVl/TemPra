@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 protocol WeatherAPIFetchable {
     func smallImageUrl(imageId: String) -> URL?

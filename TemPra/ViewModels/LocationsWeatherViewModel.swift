@@ -47,7 +47,6 @@ class LocationsWeatherViewModel: ObservableObject {
                     print("Success1")
                 }
             } receiveValue: { [weak self] locationsTomorrowWeather in
-                print(String(describing: locationsTomorrowWeather))
                 self?.locationsWeather = locationsTomorrowWeather
             }
             .store(in: &disposables)

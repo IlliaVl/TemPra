@@ -29,7 +29,6 @@ extension MetaWeatherAPI: WeatherAPIFetchable {
         return URLSession.shared.dataTaskPublisher(for: locationUrlComponents.url!)
             .map(\.data)
             .decode(type: LocationResponses.self, decoder: JSONDecoder()).flatMap(maxPublishers: .max(1)) { locationsResponse -> Publishers.MapError<URLSession.DataTaskPublisher, Error> in
-                print("locationsResponse[0]: \(locationsResponse[0])")
                 return URLSession.shared.dataTaskPublisher(for: self.getComponents(path: "\(locationsResponse[0].woeid)/").url!)
                     .mapError { $0 as Error }
             }
@@ -40,7 +39,6 @@ extension MetaWeatherAPI: WeatherAPIFetchable {
     
     func fetchTomorrowWeather(locations: [String]) -> AnyPublisher<[WeatherForecastResponse], Error> {
         return Publishers.MergeMany(locations.map({ location -> AnyPublisher<WeatherForecastResponse, Error> in
-            print(location)
             return fetchWeather(location: location)
         })).collect().eraseToAnyPublisher()
     }
