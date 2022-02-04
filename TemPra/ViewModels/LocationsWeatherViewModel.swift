@@ -10,7 +10,8 @@ import Combine
 
 class LocationsWeatherViewModel: ObservableObject {
     @Published var locationsWeather: [LocationWeather]?
-    
+    @Published var weatherError: WeatherError?
+
     private let cities = ["Gothenburg", "Stockholm", "Mountain View", "London", "New York", "Berlin"]
     private let weatherFetcher: WeatherAPIFetchable
     private var disposables = Set<AnyCancellable>()
@@ -22,29 +23,36 @@ class LocationsWeatherViewModel: ObservableObject {
         self.weatherFetcher = weatherFetcher
     }
     
+    private func mapWeatherForecastResponseToLocationWeather(response: [WeatherForecastResponse]) -> [LocationWeather] {
+        return response.map { [weak self] weatherForecastResponse -> LocationWeather in
+            let weather = weatherForecastResponse.consolidatedWeather[1]
+            return LocationWeather(
+                id: weather.id,
+                weatherStateImageURL: self?.weatherFetcher.smallImageUrl(imageId: weather.weatherStateAbbr),
+                title: weatherForecastResponse.title,
+                minTemp: weather.minTemp,
+                minTempString: weather.minTemp.toCelsius(),
+                maxTemp: weather.maxTemp,
+                maxTempString: weather.maxTemp.toCelsius()
+            )
+        }
+    }
+    
     func refresh() {
         weatherFetcher.fetchTomorrowWeather(locations: cities)
-            .map { response in
-                response.map { [weak self] weatherForecastResponse -> LocationWeather in
-                    let weather = weatherForecastResponse.consolidatedWeather[1]
-                    return LocationWeather(
-                        id: weather.id,
-                        weatherStateImageURL: self?.weatherFetcher.smallImageUrl(imageId: weather.weatherStateAbbr),
-                        title: weatherForecastResponse.title,
-                        minTemp: weather.minTemp,
-                        minTempString: weather.minTemp.toCelsius(),
-                        maxTemp: weather.maxTemp,
-                        maxTempString: weather.maxTemp.toCelsius()
-                    )
-                }
-            }
+            .map(mapWeatherForecastResponseToLocationWeather)
             .receive(on: DispatchQueue.main)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     print(error)
+                    self?.locationsWeather = []
+                    self?.weatherError = .network(description: error.localizedDescription)
                 case .finished:
-                    print("Success1")
+                    print("Success")
+                    if self?.weatherError != nil {
+                        self?.weatherError = nil
+                    }
                 }
             } receiveValue: { [weak self] locationsTomorrowWeather in
                 self?.locationsWeather = locationsTomorrowWeather

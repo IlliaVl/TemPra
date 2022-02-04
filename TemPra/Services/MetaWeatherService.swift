@@ -19,26 +19,39 @@ class MetaWeatherAPI {
 // MARK: - MetaWeatherAPIFetchable
 
 extension MetaWeatherAPI: WeatherAPIFetchable {
+    
     func smallImageUrl(imageId: String) -> URL? {
         URL(string: "https://www.metaweather.com/static/img/weather/png/64/\(imageId).png")
     }
     
-    func fetchWeather(location: String) -> AnyPublisher<WeatherForecastResponse, Error> {
+    func fetchWeather(location: String) -> AnyPublisher<WeatherForecastResponse, WeatherError> {
         var locationUrlComponents = getComponents(path: "search/")
         locationUrlComponents.queryItems = [URLQueryItem(name: "query", value: location)]
-        return URLSession.shared.dataTaskPublisher(for: locationUrlComponents.url!)
+        guard let url = locationUrlComponents.url else {
+          return Fail(error: WeatherError.network(description: "Couldn't create URL")).eraseToAnyPublisher()
+        }
+        return session.dataTaskPublisher(for: url)
+            .mapError { error in
+                WeatherError.network(description: error.localizedDescription)
+            }
             .map(\.data)
-            .decode(type: LocationResponses.self, decoder: JSONDecoder()).flatMap(maxPublishers: .max(1)) { locationsResponse -> Publishers.MapError<URLSession.DataTaskPublisher, Error> in
+            .decode(type: LocationResponses.self, decoder: JSONDecoder())
+            .flatMap(maxPublishers: .max(1)) { locationsResponse  in
                 return URLSession.shared.dataTaskPublisher(for: self.getComponents(path: "\(locationsResponse[0].woeid)/").url!)
-                    .mapError { $0 as Error }
+                    .mapError {
+                        WeatherError.network(description: $0.localizedDescription)
+                    }.eraseToAnyPublisher()
             }
             .map(\.data)
             .decode(type: WeatherForecastResponse.self, decoder: JSONDecoder())
+            .mapError { error in
+                WeatherError.network(description: error.localizedDescription)
+            }
             .eraseToAnyPublisher()
     }
     
-    func fetchTomorrowWeather(locations: [String]) -> AnyPublisher<[WeatherForecastResponse], Error> {
-        return Publishers.MergeMany(locations.map({ location -> AnyPublisher<WeatherForecastResponse, Error> in
+    func fetchTomorrowWeather(locations: [String]) -> AnyPublisher<[WeatherForecastResponse], WeatherError> {
+        return Publishers.MergeMany(locations.map({ location -> AnyPublisher<WeatherForecastResponse, WeatherError> in
             return fetchWeather(location: location)
         })).collect().eraseToAnyPublisher()
     }

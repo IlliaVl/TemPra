@@ -26,6 +26,8 @@ struct LocationsWeatherView: View {
                 
             }
         }
+        .alert("Something went wrong. Try later, please.", isPresented: Binding<Bool>(get: {locationsWeatherViewModel.weatherError != nil},set: {_ in}), actions: {
+        })
     }
 }
 

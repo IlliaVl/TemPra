@@ -10,5 +10,5 @@ import Combine
 
 protocol WeatherAPIFetchable {
     func smallImageUrl(imageId: String) -> URL?
-    func fetchTomorrowWeather(locations: [String]) -> AnyPublisher<[WeatherForecastResponse], Error>
+    func fetchTomorrowWeather(locations: [String]) -> AnyPublisher<[WeatherForecastResponse], WeatherError>
 }
