@@ -15,43 +15,16 @@ struct LocationWeatherRowView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            if (locationWeather.weatherStateImageURL != nil) {
-                HStack {
-                    AsyncImage(url: locationWeather.weatherStateImageURL)
-                    Text(locationWeather.title).font(.title)
-                }
-            } else {
-                Text(locationWeather.title).font(.title)
-            }
-            
-            HStack {
-                Text("Max temperature:")
-                Spacer()
-                Text(locationWeather.maxTempString)
-                    .foregroundColor(.red)
-            }
-            
-            HStack {
-                Text("Min temperature:")
-                Spacer()
-                Text(locationWeather.minTempString)
-                    .foregroundColor(.blue)
-            }
+        NavigationLink(destination: LocationDetailedWeatherView(locationWeather: locationWeather)) {
+            ForecastRowContentView(title: locationWeather.title,
+                       forecast: locationWeather.tomorrowForecast)
         }
     }
+    
 }
 
 struct LocationWeatherRowView_Previews: PreviewProvider {
     static var previews: some View {
-        LocationWeatherRowView(locationWeather: LocationWeather(
-            id: 1,
-            //            weatherStateImageURL: URL(string: "https://www.metaweather.com/static/img/weather/png/64/s.png"),
-            title: "London",
-            minTemp: 11.11,
-            minTempString: "11.11°C",
-            maxTemp: 22.22,
-            maxTempString: "22.22°C"
-        ))
+        LocationWeatherRowView(locationWeather: .mockValue)
     }
 }

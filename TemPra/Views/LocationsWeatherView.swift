@@ -13,22 +13,19 @@ struct LocationsWeatherView: View {
     @ObservedObject var locationsWeatherViewModel: LocationsWeatherViewModel
     
     var body: some View {
-        VStack {
-            Text("Tomorrow’s Weather Forecast").font(.headline).padding()
-            if locationsWeatherViewModel.locationsWeather == nil {
-                ProgressView().onAppear(perform: locationsWeatherViewModel.refresh)
-            } else {
-                List(locationsWeatherViewModel.locationsWeather!) { locationWeather in
-                    LocationWeatherRowView(locationWeather: locationWeather)
-                }.refreshable {
-                    locationsWeatherViewModel.refresh()
-                }
-                
+        NavigationView {
+            List(locationsWeatherViewModel.locationsWeather ?? []) { locationWeather in
+                LocationWeatherRowView(locationWeather: locationWeather)
+            }.refreshable {
+                locationsWeatherViewModel.refresh()
             }
+            .navigationTitle("Forecast")
         }
+        .onAppear(perform: locationsWeatherViewModel.refresh)
         .alert("Something went wrong. Try later, please.", isPresented: Binding<Bool>(get: {locationsWeatherViewModel.weatherError != nil},set: {_ in}), actions: {
         })
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
