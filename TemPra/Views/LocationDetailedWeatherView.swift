@@ -36,6 +36,7 @@ struct LocationDetailedWeatherView: View {
                 ForecastRowContentView(title: forecast.stateName, forecast: forecast)
             }
         }
+        .navigationBarTitle(Text(locationWeather.title), displayMode: .inline)
     }
 }
 
