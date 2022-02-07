@@ -36,6 +36,9 @@ extension MetaWeatherAPI: WeatherAPIFetchable {
             }
             .map(\.data)
             .decode(type: LocationResponses.self, decoder: JSONDecoder())
+            .mapError { error in
+                WeatherError.parsing(description: error.localizedDescription)
+            }
             .flatMap(maxPublishers: .max(1)) { locationsResponse  in
                 return URLSession.shared.dataTaskPublisher(for: self.getComponents(path: "\(locationsResponse[0].woeid)/").url!)
                     .mapError {
@@ -45,7 +48,7 @@ extension MetaWeatherAPI: WeatherAPIFetchable {
             .map(\.data)
             .decode(type: WeatherForecastResponse.self, decoder: JSONDecoder())
             .mapError { error in
-                WeatherError.network(description: error.localizedDescription)
+                WeatherError.parsing(description: error.localizedDescription)
             }
             .eraseToAnyPublisher()
     }
@@ -68,13 +71,13 @@ private extension MetaWeatherAPI {
         return components
     }
     
-    func makeLocationComponents(city: String) -> URLComponents {
+    private func makeLocationComponents(city: String) -> URLComponents {
         var components = getComponents(path: "search")
         components.queryItems = [URLQueryItem(name: "query", value: city)]
         return components
     }
     
-    func makeTomorrowWeatherComponents(woeid: Int) -> URLComponents {
+    private func makeTomorrowWeatherComponents(woeid: Int) -> URLComponents {
         return getComponents(path: "\(woeid)")
     }
 }
